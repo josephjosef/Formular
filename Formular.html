@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Formular</title>
+</head>
+<style>
+    .container {
+        max-width: fit-content;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    button {
+        margin-top: 0.5rem;
+    }
+    body {
+        background-image: url("windows-98-background-mvrmy77vuyblzxba.jpg");
+    }
+    #kommentarFeld {
+        max-width: 172px;
+        max-height: 100px;
+        min-width: 172px;
+        min-height: 100px;
+    }
+</style>
+<body>
+<img src="Pflanzen-Koelle-Logo-gruen.jpg" alt="Pflanzen-Koelle Logo" style="width:300px;height:180px; margin-left: auto; margin-top: auto;">
+<h1 id="formularHeader" style= "max-width: fit-content; margin-left: auto; margin-right: auto;">Kontaktieren Sie uns</h1>
+<div class="container">
+    <label for="textVorname"><b>Vorname:</b></label>
+    <br>
+    <input type="text" id="textVorname" name="textVorname"><br><br>
+    <label for="textNachname"><b>Nachname:</b></label>
+    <br>
+    <input type="text" id="textNachname" name="textNachname"><br><br>
+    <label for="textEmail"><b>Email:</b></label>
+    <br>
+    <input type="text" id="textEmail" name="textEmail"><br><br>
+    <label for="datePickerGeburtstag"><b>Geburtstag:</b></label>
+    <br>
+    <input type="date" id="datePickerGeburtstag"/><br><br>
+    <label for="kommentarFeld"><b>Kommentar eingeben:</b></label>
+    <br>
+    <textarea id="kommentarFeld"></textarea>
+    <br>
+    <button onclick="saveUser()">Absenden</button>
+    <p id="fehler" style="color: rgb(255, 0, 0);"></p>
+</div>
+
+<script>
+    const dateNow = new Date()
+    //const personen = []
+    
+    class Person {
+        constructor(vorname, nachname, email, geburtstag, kommentar) {
+        this.vorname = vorname;
+        this.nachname = nachname;
+        this.email = email
+        this.geburtstag = geburtstag
+        this.kommentar = kommentar
+        }
+    }
+    function saveUser() {
+        try {
+            const vornameInput = document.getElementById("textVorname").value;
+            const nachnameInput = document.getElementById("textNachname").value;
+            const kommentarInput = document.getElementById("kommentarFeld").value;
+            const emailInput = document.getElementById("textEmail").value;
+            const geburtstagInputInDate = new Date(document.getElementById("datePickerGeburtstag").value);
+            const geburtstagJahr = document.getElementById("datePickerGeburtstag").value
+
+            let emailString = emailInput.toString();
+
+            checkInputs(vornameInput, nachnameInput, kommentarInput, emailInput, geburtstagJahr, geburtstagInputInDate)
+
+            person = new Person(vornameInput, nachnameInput, emailInput, geburtstagJahr, kommentarInput)
+            //personen.push(person)
+            console.log(person)
+            //console.log(personen)
+            alert("Erfolgreich abgeschickt")
+        } catch (error) {
+            console.error("Etwas ist schief gelaufen", error)
+            alert("Ein Feher ist aufgetaucht")
+        }
+    }
+
+    function checkInputs(vornameInput, nachnameInput, kommentarInput, emailInput, geburtstagJahr, geburtstagInputInDate) {
+        document.getElementById("fehler").innerText = ""
+
+        if (vornameInput == "" || nachnameInput == "" || geburtstagJahr == "" || kommentarInput == "" || emailInput == "") {
+                document.getElementById("fehler").innerText = "Bitte alle Felder ausfüllen"
+                throw new Error("Fehlende Angaben")
+        }
+        if (!vornameInput.match(/^[a-zäöüßA-ZÄÖÜß]+$/)) {
+                document.getElementById("fehler").innerText = "Ungültiger Vorname"
+                throw new Error("Ungültige Zeichen im Vornamen")             
+        }
+        if (!nachnameInput.match(/^[a-zäöüßA-ZÄÖÜß]+$/)) {
+                document.getElementById("fehler").innerText = "Ungültiger Nachname"
+                throw new Error("Ungültige Zeichen im Nachnamen")             
+        }
+        if (!emailInput.match(/^[a-zäöüßA-ZÄÖÜß0-9@._-]+$/)) {
+                document.getElementById("fehler").innerText = "Ungültige Email"
+                throw new Error("Email Invalid")
+        }
+        if (!emailInput.includes("@") || !emailInput.includes(".")) {
+                document.getElementById("fehler").innerText = "Ungültige Email"
+                throw new Error("Email Invalid")
+            }
+        if (geburtstagInputInDate >= dateNow) {
+                document.getElementById("fehler").innerText = "Geburtstag invalid"
+                throw new Error("Invalid Geburtstag")
+        }
+    }
+</script>
+
+</body>
+</html>
