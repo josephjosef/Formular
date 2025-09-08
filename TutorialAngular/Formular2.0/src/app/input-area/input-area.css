@@ -1,0 +1,12 @@
+.input-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#commentField {
+    max-width: 172px;
+    max-height: 100px;
+    min-width: 172px;
+    min-height: 100px;
+}

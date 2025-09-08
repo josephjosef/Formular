@@ -1,0 +1,18 @@
+.brand-name {
+    max-width: 330px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: green;
+}
+
+.logo-name {
+    font-size: xx-large;
+}
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 160px;
+    margin-left: 800px;
+}
