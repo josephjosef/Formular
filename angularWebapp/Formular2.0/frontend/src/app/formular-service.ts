@@ -10,13 +10,24 @@ export class FormularService {
 
   constructor(private http: HttpClient) {}
 
+  //1formularList$!: Observable<Formular[]>
+
   addFormular(formular: Formular) {
+    console.log("formularService add")
     return this.http.post(`${this.url}/postFormular`, formular);
   }
 
   getAllFormulare(): Observable<Formular[]> {
     return this.http.get<Formular[]>(`${this.url}/getFormulare`)
   }
+
+  /*1saveFormularList(formularList: Observable<Formular[]>) {
+    this.formularList$ = formularList
+  }
+
+  1getFormularList() {
+    return this.formularList$
+  }*/
 }
 
 export interface Formular {

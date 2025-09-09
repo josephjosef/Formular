@@ -1,7 +1,9 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { FormularService } from '../formular-service';
 import { Formular } from '../formular-service';
+import { Observable } from 'rxjs';
+import { Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-input-area',
@@ -35,6 +37,7 @@ import { Formular } from '../formular-service';
 })
 export class InputArea {
   formularService = inject(FormularService)
+  @Output() newItemEvent = new EventEmitter<Formular>();
 
   inputData = new FormGroup({
     firstName: new FormControl(""),
@@ -43,8 +46,6 @@ export class InputArea {
     comment: new FormControl(""),
     email: new FormControl("")
   })
-
-  valid: boolean = false
 
   submitFormular() {
     try {
@@ -60,20 +61,17 @@ export class InputArea {
         email: email,
         birthday: birthday,
         comment: comment
-      }      
+      }
       console.log(formular)
-      this.sendFormular(formular)
+      this.addNewFormular(formular)
+      //this.sendFormular(formular)
 
     } catch (error) {
       console.log("fehler", error)
     }
   }
 
-  async sendFormular(formular: Formular) {
-    try {
-      this.formularService.addFormular(formular)
-    } catch (error) {
-      console.log("fehler", error)
-    }
+  addNewFormular(formular: Formular) {
+    this.newItemEvent.emit(formular)
   }
 }

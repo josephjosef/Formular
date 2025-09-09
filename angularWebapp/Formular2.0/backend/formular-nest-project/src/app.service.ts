@@ -1,13 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { Formular } from '../../../frontend/src/app/formular-service';
+import { Formular } from './formular';
 
 @Injectable()
 export class AppService {
   formularList: Formular[] = [];
 
   addFormular(formular: Formular) {
+    const id = this.formularList.length
+    formular.id = id
     this.formularList.push(formular);
-    console.log("AppService backend:", formular)
+    console.log("addFormular:", formular)
   }
 
   findAll(): Formular[] {

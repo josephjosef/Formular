@@ -1,15 +1,16 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { InputArea } from '../input-area/input-area';
 import { FormularService } from '../formular-service';
 import { Formular } from '../formular-service';
+import { Observable, switchMap } from 'rxjs';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-ticket-list',
-  imports: [InputArea],
-  standalone: true,
+  imports: [InputArea, AsyncPipe],
   template: /*Html*/`
     <section class="list-container">
-      <!--@for(formular of formulare; track formular.id) {
+      @for(formular of receivedFormularList | async; track formular.id) {
         <div class="ticketss">
           <p style="color: red;"><b>{{formular.id}}:</b></p>
           <label><b>Vorname: </b>{{formular.firstName}}</label>
@@ -22,12 +23,12 @@ import { Formular } from '../formular-service';
           <br>
           <label><b>Kommentar: </b>{{formular.comment}}</label>
         </div>
-    }-->
+    }
     </section>
   `,
   styleUrl: './ticket-list.css'
 })
 export class TicketList {
   formularService = inject(FormularService)
- // formulare: Formular[] = this.formularService.getFormulare()
+  @Input() receivedFormularList!: Observable<Formular[]>;
 }

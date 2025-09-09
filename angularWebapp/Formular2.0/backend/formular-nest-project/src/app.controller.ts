@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { AppService } from './app.service';
-import * as formularService from '../../../frontend/src/app/formular-service'
+import type { Formular } from './formular';
 
 @Controller("/api/formular")
 export class AppController {
@@ -13,8 +13,9 @@ export class AppController {
   }
 
   @Post("/postFormular")
-  async postFormulare(@Body() formular: formularService.Formular) {
+  async postFormulare(@Body() formular: Formular) {
     console.log("post funktioniert")
-    this.appService.addFormular(formular)
+    this.appService.addFormular(formular);
+    return { formular }
   }
 }
