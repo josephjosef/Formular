@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { GetTickets } from '../get-tickets';
-import { Formular } from '../get-tickets';
+import { FormularService } from '../formular-service';
+import { Formular } from '../formular-service';
 
 @Component({
   selector: 'app-input-area',
@@ -34,7 +34,7 @@ import { Formular } from '../get-tickets';
   styleUrl: './input-area.css'
 })
 export class InputArea {
-  getTickets = inject(GetTickets)
+  formularService = inject(FormularService)
 
   inputData = new FormGroup({
     firstName: new FormControl(""),
@@ -60,11 +60,18 @@ export class InputArea {
         email: email,
         birthday: birthday,
         comment: comment
-      }
-
-      this.getTickets.addFormular(formular)
+      }      
       console.log(formular)
+      this.sendFormular(formular)
 
+    } catch (error) {
+      console.log("fehler", error)
+    }
+  }
+
+  async sendFormular(formular: Formular) {
+    try {
+      this.formularService.addFormular(formular)
     } catch (error) {
       console.log("fehler", error)
     }
