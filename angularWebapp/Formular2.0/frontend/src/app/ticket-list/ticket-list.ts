@@ -1,4 +1,4 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { InputArea } from '../input-area/input-area';
 import { FormularService } from '../formular-service';
 import { Formular } from '../formular-service';
@@ -10,7 +10,7 @@ import { AsyncPipe } from '@angular/common';
   imports: [InputArea, AsyncPipe],
   template: /*Html*/`
     <section class="list-container">
-      @for(formular of receivedFormularList | async; track formular.id) {
+      @for(formular of receivedFormularList() | async; track formular.id) {
         <div class="ticketss">
           <p style="color: red;"><b>{{formular.id}}:</b></p>
           <label><b>Vorname: </b>{{formular.firstName}}</label>
@@ -30,5 +30,5 @@ import { AsyncPipe } from '@angular/common';
 })
 export class TicketList {
   formularService = inject(FormularService)
-  @Input() receivedFormularList!: Observable<Formular[]>;
+  receivedFormularList = input<Observable<Formular[]>>()
 }

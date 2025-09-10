@@ -4,7 +4,7 @@ import { InputArea } from './input-area/input-area';
 import { TicketList } from './ticket-list/ticket-list';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { Formular, FormularService } from './formular-service';
-import { Observable } from 'rxjs';
+import { Observable, pipe, takeUntil } from 'rxjs';
 import { Signal } from '@angular/core';
 
 @Component({
@@ -27,17 +27,15 @@ import { Signal } from '@angular/core';
 export class App {
 protected readonly title = signal('Formular2.0');
 
-constructor(){
-  effect(() => {
+  /*constructor(){
+    effect(() => {
       if (this.receivedFormular()) {
-        this.formularList = this.formularService.getAllFormulare()
-        console.log("receivedFormular bevor false setzen: ", this.receivedFormular())
-        this.receivedFormular.set(false)
-        console.log("receivedFormular nach false setzen: ", this.receivedFormular())
-        console.log("formularList: ", this.formularList)
+        this.formularList = this.formularService.getAllFormulare().pipe(
+          this.receivedFormular.set(false)
+        ).subscribe()
       }
     })
-}
+  }*/
 
   formularService = inject(FormularService)
   formular!: Formular;
@@ -45,19 +43,24 @@ constructor(){
   formularList!: Observable<Formular[]>
 
   addFormular(newFormular: Formular) {
-    this.formular = newFormular
-    console.log("PARENT", newFormular)
-    this.sendFormular()
-    this.receivedFormular.set(true)
+    try {
+      this.formular = newFormular
+      this.sendFormular()
+      this.receivedFormular.set(true)
+    } catch (error) {
+      window.alert("Formular konnte nicht gesendet werden. Bitte versuche es später nochmal")
+    }
   }
 
   sendFormular() {
     this.formularService.addFormular(this.formular).subscribe({
       next: (res) => {
-        console.log("Observer value", res);
+        window.alert("Formular gesendet")
+        this.formularList = this.formularService.getAllFormulare()
       },
       error: (err) => {
-        console.error("Fehler beim Senden des Formulars", err);
+        window.alert("Ein Fehler ist aufgekommen. Bitte versuche es später erneut")
+        throw new Error("Formular konnte nicht gesendet werden")
       }
     });
   }
