@@ -6,28 +6,30 @@ import { MatCard } from '@angular/material/card';
 import {MatIconModule} from '@angular/material/icon';
 import {MatTableModule} from '@angular/material/table'
 import { Observable } from 'rxjs';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-ticket-list',
-  imports: [AsyncPipe, MatCard, MatIconModule, MatTableModule, RouterModule, RouterOutlet],
+  imports: [AsyncPipe, MatCard, MatIconModule, MatTableModule, RouterModule, RouterOutlet, RouterLink],
   templateUrl: './ticket-list.html',
   styleUrl: './ticket-list.css'
 })
 export class TicketList {
   formularService = inject(FormularService)
-  //receivedFormularList = input<Signal<Formular[]>>()
-  receivedFormularList = input<Observable<Formular[]>>()
+  aLength = input<number>()
 
-  /*checkSignalLength(): boolean {
-    const array = this.receivedFormularList()
-    const arrayLength = array?.length
-    if (arrayLength! >= 0) {
+  checkArrayLength(): boolean {
+    if(this.aLength()! > 0) {
+      console.log(this.aLength())
       return true
     } else {
       return false
     }
-  }*/
+  }
 
-  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'birthday', 'comment'];
+  get dataSource(): Formular[] {
+    return this.formularService.formularListSignal();
+  }
+
+  displayedColumns: string[] = ["id", "firstName", "lastName", "email", "birthday", "comment"];
 }

@@ -10,6 +10,7 @@ export class FormularService {
   formular!: Formular
   sendFormularBool: WritableSignal<boolean> = signal(false)
   formularSuccessfullySent: WritableSignal<boolean> = signal(false)
+  formularListSignal = signal<Formular[]>([]);
 
   constructor(private http: HttpClient) {}
 
