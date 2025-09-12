@@ -1,11 +1,10 @@
-import { Component, effect, inject, signal, input, WritableSignal } from '@angular/core';
+import { Component, effect, inject, Signal, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { InputArea } from './input-area/input-area';
 import { TicketList } from './ticket-list/ticket-list';
-import { RouterOutlet, RouterLink } from '@angular/router';
 import { Formular, FormularService } from './formular-service';
-import { Observable, pipe, takeUntil } from 'rxjs';
-import { Signal } from '@angular/core';
+import { Observable, tap } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-root',
@@ -13,11 +12,11 @@ import { Signal } from '@angular/core';
   template:/*Html*/ `
   <main>
     <section class="brand-name">
-      <img class="brand-logo" src="/Pflanzen-Koelle-Logo-gruen.jpg" alt="logo" style="width:100px;height:60px">
-      <h1 class="logo-name">Pflanzen Kölle</h1>
+      <img class="brand-logo" src="/Pflanzen-Koelle-Logo-gruen.jpg" alt="logo" style="width:220px;height:140px">
     </section>
+    <h2 style="font-size: xx-large; margin-left: 760px">Kontaktieren sie uns</h2>
     <section class="content">
-      <app-input-area (newItemEvent)="addFormular($event)"></app-input-area>
+      <app-input-area></app-input-area>
       <app-ticket-list [receivedFormularList] = formularList ></app-ticket-list>
     </section>
   </main>
@@ -26,42 +25,18 @@ import { Signal } from '@angular/core';
 })
 export class App {
 protected readonly title = signal('Formular2.0');
+formularService = inject(FormularService)
+formularList!: Observable<Formular[]>
+//formularListSignal!: Signal<Formular[]>
 
-  /*constructor(){
+  constructor(){
     effect(() => {
-      if (this.receivedFormular()) {
+      if (this.formularService.sendFormularBool()) {
         this.formularList = this.formularService.getAllFormulare().pipe(
-          this.receivedFormular.set(false)
-        ).subscribe()
+          tap({ complete: () => this.formularService.sendFormularBool.set(false) }),
+        )
       }
+      //this.formularListSignal = toSignal(this.formularList, {initialValue: []})
     })
-  }*/
-
-  formularService = inject(FormularService)
-  formular!: Formular;
-  receivedFormular: WritableSignal<boolean> = signal(false)
-  formularList!: Observable<Formular[]>
-
-  addFormular(newFormular: Formular) {
-    try {
-      this.formular = newFormular
-      this.sendFormular()
-      this.receivedFormular.set(true)
-    } catch (error) {
-      window.alert("Formular konnte nicht gesendet werden. Bitte versuche es später nochmal")
-    }
-  }
-
-  sendFormular() {
-    this.formularService.addFormular(this.formular).subscribe({
-      next: (res) => {
-        window.alert("Formular gesendet")
-        this.formularList = this.formularService.getAllFormulare()
-      },
-      error: (err) => {
-        window.alert("Ein Fehler ist aufgekommen. Bitte versuche es später erneut")
-        throw new Error("Formular konnte nicht gesendet werden")
-      }
-    });
   }
 }

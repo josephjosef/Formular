@@ -1,9 +1,5 @@
 .brand-name {
-    max-width: 330px;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    background-color: green;
+    max-width: fit-content;
 }
 
 .logo-name {

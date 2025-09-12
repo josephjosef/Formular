@@ -1,19 +1,17 @@
-/*import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 
-export function forbiddenDateValidator(birthday: string): ValidatorFn {
-
-    const birthdayDate = new Date(birthday!)
-    const today = new Date()
-
-    birthdayDate.setHours(0,0,0,0)
-    today.setHours(0,0,0,0)
-
-    if (birthdayDate >= today) {
-      this.birthdayInvalid.set(true)
-    }
-
+export function forbiddenCharacterValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
-    const forbidden = nameRe.test(control.value);
-    return forbidden ? {forbiddenName: {value: control.value}} : null;
+
+    const forbiddenValue = control.value
+
+    const regexPattern = /^[a-zäöüßA-ZÄÖÜß]+$/
+    const isValid = regexPattern.test(forbiddenValue)
+
+    if (isValid) {
+      return null
+    } else {
+      return forbiddenValue? {forbiddenName: {value: control.value}} : null;
+    }
   };
-}*/
+}

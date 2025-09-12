@@ -1,0 +1,16 @@
+<h2 mat-dialog-title>Hallo {{data.formular.firstName}}</h2>
+<mat-dialog-content>
+  Möchtest du dein Formular wirklich absenden?
+  <br>
+  <ul class="dialog">
+    <li>Vorname: {{data.formular.firstName}}</li>
+    <li>Nachname: {{data.formular.lastName}}</li>
+    <li>Email: {{data.formular.email}}</li>
+    <li>Geburtstag: {{data.formular.birthday}}</li>
+    <li>Kommentar: {{data.formular.comment}}</li>
+  </ul>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button matButton mat-dialog-close cdkFocusInitial (click)="submitSend(); openSnackBar()">Ja</button>
+  <button matButton mat-dialog-close (click)="cancelSend()">Nein</button>
+</mat-dialog-actions>

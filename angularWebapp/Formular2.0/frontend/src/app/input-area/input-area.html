@@ -1,0 +1,63 @@
+<form [formGroup]="inputData">
+    <div class="input-field">
+        <mat-form-field>
+        <mat-label>Vorname</mat-label>
+        <input matInput formControlName="firstName" required/>
+        @if (inputData.controls['firstName'].hasError('required')) {
+        <mat-error>Vorname ist erforderlich.</mat-error>
+        }
+        @if (inputData.controls['firstName'].hasError('forbiddenName')) {
+        <mat-error>Ungültige Zeichen</mat-error>
+        }
+        </mat-form-field>
+    </div>
+    <div class="input-field">
+        <mat-form-field>
+        <mat-label>Nachname</mat-label>
+        <input matInput formControlName="lastName" required/>
+        @if (inputData.controls['lastName'].hasError('required')) {
+        <mat-error>Nachname ist erforderlich.</mat-error>
+        }
+        @if (inputData.controls['lastName'].hasError('forbiddenName')) {
+        <mat-error>Ungültige Zeichen</mat-error>
+        }
+        </mat-form-field>
+    </div>
+    <div class="input-field">
+        <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" required/>
+        @if (inputData.controls['email'].hasError('required') || inputData.controls['email'].hasError('email')) {
+        <mat-error>email ist erforderlich.</mat-error>
+        }
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field class="datePicker">
+            <mat-label>Geburtstag</mat-label>
+            <input matInput [matDatepicker]="geburtstagsPicker" matInput [min]="minDate" [max]="maxDate" formControlName="birthday" required>
+            @if (inputData.controls['birthday'].hasError('required')) {
+            <mat-error>Geburtstag ist erforderlich.</mat-error>
+            }
+            <mat-datepicker-toggle matIconSuffix [for]="geburtstagsPicker"></mat-datepicker-toggle>
+            <mat-datepicker #geburtstagsPicker [disabled]="false"></mat-datepicker>
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+        <mat-label>Textarea</mat-label>
+        <textarea matInput formControlName="comment" required></textarea>
+        @if (inputData.controls['comment'].hasError('required')) {
+        <mat-error>Kommentar ist erforderlich.</mat-error>
+        }
+        </mat-form-field>
+    </div>
+    <div>
+        @if (checkInputsValidation()) {
+            <button class="button" matButton="elevated" (click)="openDialog('3000ms', '1500ms')">Absenden</button>
+        }
+        @else {
+            <button class="button" matButton="elevated" (click)="openDialog('3000ms', '1500ms')" disabled>Absenden</button>
+        }
+    </div>
+</form>

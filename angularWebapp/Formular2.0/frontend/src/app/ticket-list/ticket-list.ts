@@ -1,34 +1,33 @@
-import { Component, inject, input } from '@angular/core';
-import { InputArea } from '../input-area/input-area';
+import { Component, computed, inject, input, Signal, WritableSignal } from '@angular/core';
 import { FormularService } from '../formular-service';
 import { Formular } from '../formular-service';
-import { Observable, switchMap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { MatCard } from '@angular/material/card';
+import {MatIconModule} from '@angular/material/icon';
+import {MatTableModule} from '@angular/material/table'
+import { Observable } from 'rxjs';
+import { RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-ticket-list',
-  imports: [InputArea, AsyncPipe],
-  template: /*Html*/`
-    <section class="list-container">
-      @for(formular of receivedFormularList() | async; track formular.id) {
-        <div class="ticketss">
-          <p style="color: red;"><b>{{formular.id}}:</b></p>
-          <label><b>Vorname: </b>{{formular.firstName}}</label>
-          <br>
-          <label><b>Nachname: </b>{{formular.lastName}}</label>
-          <br>
-          <label><b>Email: </b>{{formular.email}}</label>
-          <br>
-          <label><b>Geburtstag: </b>{{formular.birthday}}</label>
-          <br>
-          <label><b>Kommentar: </b>{{formular.comment}}</label>
-        </div>
-    }
-    </section>
-  `,
+  imports: [AsyncPipe, MatCard, MatIconModule, MatTableModule, RouterModule, RouterOutlet],
+  templateUrl: './ticket-list.html',
   styleUrl: './ticket-list.css'
 })
 export class TicketList {
   formularService = inject(FormularService)
+  //receivedFormularList = input<Signal<Formular[]>>()
   receivedFormularList = input<Observable<Formular[]>>()
+
+  /*checkSignalLength(): boolean {
+    const array = this.receivedFormularList()
+    const arrayLength = array?.length
+    if (arrayLength! >= 0) {
+      return true
+    } else {
+      return false
+    }
+  }*/
+
+  displayedColumns: string[] = ['id', 'firstName', 'lastName', 'email', 'birthday', 'comment'];
 }

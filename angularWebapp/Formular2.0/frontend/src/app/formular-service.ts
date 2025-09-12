@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal, WritableSignal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
 })
 export class FormularService {
   private url = 'http://localhost:3000/api/formular';
+  formular!: Formular
+  sendFormularBool: WritableSignal<boolean> = signal(false)
+  formularSuccessfullySent: WritableSignal<boolean> = signal(false)
 
   constructor(private http: HttpClient) {}
 
@@ -17,6 +20,18 @@ export class FormularService {
 
   getAllFormulare(): Observable<Formular[]> {
     return this.http.get<Formular[]>(`${this.url}/getFormulare`)
+  }
+
+  submitFormular() {
+    this.addFormular(this.formular).subscribe({
+      next: (res) => {
+        this.formularSuccessfullySent.set(true)
+      },
+      error: (err) => {
+        this.formularSuccessfullySent.set(false)
+        throw new Error("Formular konnte nicht gesendet werden")
+      }
+    });
   }
 }
 
